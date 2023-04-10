@@ -20,11 +20,13 @@ for(let i = 0; i < totalAlumnos; i++) {
     alumno.presentismo = "ausente";
     ausentes ++;
   }
+  else{
+    alert("presentismo invalido")
+  }
 
   alumnos.push(alumno);
 }
 
-console.log(alumnos);
 let porcentajePresentes = (presentes * 100)/totalAlumnos
 console.log(`El numero total de alumnos es: ${totalAlumnos}`)  
 console.log(`hay ${presentes} alumnos presentes`)
