@@ -1,38 +1,88 @@
-let totalAlumnos = Number(prompt("Ingrese la cantidad total de alumnos:"));
-let alumnos = [];
-let presentes = 0;
-let ausentes = 0;
+let listaPresentes = [];
+      let listaAusentes = [];
+      let alumnos = [];
+      let presentes = 0;
+      let ausentes = 0;
+      let totales;
+      let nombre = document.getElementById("nombre");
+      let apellido = document.getElementById("apellido");
+      let presente = document.getElementById("presente");
+      let ausente = document.getElementById("ausente");
+      let confirmar = document.getElementById("confirmar");
+      let totalAlumnos = document.getElementById("totalAlumnos");
+      let liAusentes = document.getElementById("listaAusentes");
+      let liPresentes = document.getElementById("listaPresentes");
+      let liTotal = document.getElementById("listaTotal");
 
-for(let i = 0; i < totalAlumnos; i++) {
-  let alumno = {
-    nombre: "",
-    apellido: "",
-    presentismo: "",
-  };
- 
-  alumno.nombre = prompt(`Ingrese el nombre del alumno ${i+1}:`);
-  alumno.apellido = prompt(`Ingrese el apellido del alumno ${i+1}:`);
+      ausente.addEventListener("change", () => {
+        if (ausente.checked) {
+          presente.checked = false;
+        }
+      });
 
-  let presente = prompt(`El alumno ${alumno.nombre} ${alumno.apellido} está (P) presente o (A) ausente?`).toUpperCase().trim();
-  if(presente == 'P'){
-    alumno.presentismo = "presente";
-    presentes ++;
-  } else if (presente == 'A'){
-    alumno.presentismo = "ausente";
-    ausentes ++;
-  }
-  else{
-    alert("presentismo invalido")
-  }
+      presente.addEventListener("change", () => {
+        if (presente.checked) {
+          ausente.checked = false;
+        }
+      });
 
-  alumnos.push(alumno);
-}
-let listaAusentes = alumnos.filter(alumno => alumno.presentismo === "ausente");
-let listaPresentes = alumnos.filter(alumno => alumno.presentismo === "presente");
-let porcentajePresentes = (presentes * 100)/totalAlumnos
-console.log(`El numero total de alumnos es: ${totalAlumnos}`)  
-console.log(`hay ${presentes} alumnos presentes`)
-console.log(`hay ${ausentes} alumnos ausentes`)
-console.log(`hay ${porcentajePresentes}% de presentismo`)
-console.log(listaAusentes)
-console.log(listaPresentes)
+      confirmar.addEventListener("click", () => {
+        let alumno = {
+          nombre: "",
+          apellido: "",
+          presentismo: "",
+        };
+
+        alumno.nombre = nombre.value;
+        alumno.apellido = apellido.value;
+
+        if (presente.checked) {
+          alumno.presentismo = "presente";
+          presentes++;
+          listaPresentes.push(alumno);
+
+          let nuevoElemento = document.createElement("li");
+          nuevoElemento.textContent = alumno.nombre + " " + alumno.apellido;
+          liPresentes.appendChild(nuevoElemento);
+
+        } else if (ausente.checked) {
+          alumno.presentismo = "ausente";
+          ausentes++;
+          listaAusentes.push(alumno);
+          
+
+          let nuevoElemento = document.createElement("li");
+          nuevoElemento.textContent = alumno.nombre + " " + alumno.apellido;
+          liAusentes.appendChild(nuevoElemento);
+          
+        } else {
+          alert("presentismo invalido");
+        }
+
+        alumnos.push(alumno);
+        nombre.value = "";
+        apellido.value = "";
+        totales = totalAlumnos.value;
+        localStorage.setItem("alumno", JSON.stringify(alumnos));
+
+        let nuevoElemento = document.createElement("li");
+        nuevoElemento.textContent = alumno.nombre + " " + alumno.apellido;
+        liTotal.appendChild(nuevoElemento);
+      });
+
+
+
+limpiar.addEventListener("click", () => {
+  localStorage.clear();
+  alumnos.splice(0, alumnos.length);
+  presente.checked = false;
+  ausente.checked = false;
+  liTotal.remove()
+});
+
+let porcentajePresentes = (presentes * 100) / totalAlumnos;
+console.log(`hay ${presentes} alumnos presentes`);
+console.log(`hay ${ausentes} alumnos ausentes`);
+console.log(`hay ${porcentajePresentes}% de presentismo`);
+console.log(listaAusentes);
+console.log(listaPresentes);
